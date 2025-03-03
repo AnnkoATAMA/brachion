@@ -1,6 +1,6 @@
 FROM oven/bun:latest
 
-WORKDIR /front
+WORKDIR /frontend
 
 COPY package.json bun.lockb ./
 
@@ -8,4 +8,4 @@ RUN bun install
 
 COPY . .
 
-CMD ["bun", "run", "dev"]
+CMD ["bun", "run", "dev", "--host"]
