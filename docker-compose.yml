@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/mysql.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+
+  fastapi:
+    build:
+      context: ./backend
+      dockerfile: backend/api/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back/api:/back
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8000"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 3s
+
+  front:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./front:/front:cached
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:5173"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 3s
+    depends_on:
+      fastapi:
+        condition: service_healthy
