@@ -1,13 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
-from routers import router
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(
-    title="FastAPI",
-    description="SampleAPI",
-    middleware=[Middleware(SessionMiddleware, secret_key=Env.SECRET_KEY)],
-)
+app = FastAPI()
 
 origins = [
     "http://localhost:5173",
@@ -30,8 +25,8 @@ def health():
     return "working!"
 
 prefix = "/api"
-app.include_router(user.router, prefix=prefix)
-# router足すときはここに追記してね
+# app.include_router(user.router, prefix=prefix)
+# # router足すときはここに追記してね
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="localhost", reload=True)
