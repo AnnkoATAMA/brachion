@@ -16,7 +16,7 @@ const App = () => {
             <Routes>
                 <Route index element={<ProtectRoute><HomePage /></ProtectRoute>} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="*" element={<ProtectRoute><NotFoundPage/></ProtectRoute>} />
+                <Route path="*" element={<NotFoundPage/>} />
             </Routes>
         </ThemeProvider>
     );
