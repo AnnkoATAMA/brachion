@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routers import user
 
 app = FastAPI()
 
@@ -18,7 +19,7 @@ def health():
     return "working!"
 
 prefix = "/api"
-# app.include_router(user.router, prefix=prefix)
+app.include_router(user.user_router, prefix=prefix)
 # # router足すときはここに追記してね
 
 if __name__ == "__main__":
