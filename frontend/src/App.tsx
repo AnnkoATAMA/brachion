@@ -7,7 +7,7 @@ import ProtectRoute from "./components/ProtectRoute.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
-import RegisterPage from "./pages/RregisterPage.tsx";
+import RegisterPage from "./pages/RegisterPage.tsx";
 
 const App = () => {
     const theme = useTemplateTheme();

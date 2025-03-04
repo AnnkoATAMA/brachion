@@ -1,30 +1,24 @@
-import {Box, Button, Container, TextField, Typography} from "@mui/material";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { use } from "../utils/use";
+import axios from "axios";
+
+const registerUser = async (name: string, email: string, password: string) => {
+    return axios.post("/api/user/register", { name, email, password }, { withCredentials: true });
+};
 
 const Register = () => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const handleRegister = async () => {
-        try {
-            const response = await fetch("/api/user/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            });
-
-            if (response.ok) {
-                navigate("/login");
-            } else {
-                alert("Registration failed");
-            }
-        } catch (error) {
-            console.error("Registration error", error);
-        }
+    const handleRegister = () => {
+        const registerPromise = registerUser(name, email, password).then(() => {
+            navigate("/login");
+        });
+        use(registerPromise);
     };
 
     return (
@@ -35,6 +29,14 @@ const Register = () => {
                 </Typography>
             </Box>
             <Box>
+                <TextField
+                    fullWidth
+                    label="Name"
+                    variant="outlined"
+                    margin="normal"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
                 <TextField
                     fullWidth
                     label="Email"
@@ -59,10 +61,11 @@ const Register = () => {
                     sx={{ mt: 2 }}
                     onClick={handleRegister}
                 >
-                    新規登録
+                    Register
                 </Button>
             </Box>
         </Container>
     );
-}
+};
+
 export default Register;

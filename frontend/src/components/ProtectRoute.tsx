@@ -1,14 +1,14 @@
 import { Navigate } from "react-router-dom";
-import {ReactNode} from "react";
+import { ReactNode, useContext } from "react";
+import { AuthContext } from "./AuthContext";
+
 interface ProtectRouteProps {
     children: ReactNode;
 }
-const ProtectRoute = ({ children }:ProtectRouteProps) => {
-    const token = localStorage.getItem("jwt");
-    if (!token) {
-        return <Navigate to="/login" />;
-    }
-    return children;
-}
+
+const ProtectRoute = ({ children }: ProtectRouteProps) => {
+    const { isAuthenticated } = useContext(AuthContext);
+    return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
 
 export default ProtectRoute;
