@@ -5,7 +5,7 @@ import { use } from "../utils/use";
 import axios from "axios";
 
 const registerUser = async (name: string, email: string, password: string) => {
-    return axios.post("/api/user/register", { name, email, password }, { withCredentials: true });
+    return axios.post("http://localhost:8000/api/user/register", { name, email, password }, { withCredentials: true });
 };
 
 const Register = () => {
