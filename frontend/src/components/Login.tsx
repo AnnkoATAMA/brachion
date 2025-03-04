@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate } from "react-router-dom";
 
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
 
@@ -64,6 +64,9 @@ const Login = () =>  {
                 >
                     Login
                 </Button>
+                <Box alignItems="center">
+                    <Link to={"/register"}>{"新規登録はこちら"}</Link>
+                </Box>
             </Box>
         </Container>
     );
