@@ -15,6 +15,7 @@ SECRET_KEY = Env.SECRET_KEY
 ALGORITHM = Env.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = Env.ACCESS_TOKEN_EXPIRE_MINUTES
 
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password):
@@ -35,14 +36,41 @@ async def get_user_by_name(db: AsyncSession, name: str):
     )
     return result.scalar_one_or_none()
 
-async def register(db: AsyncSession, user_body: user_schema.UserCreate) -> user_model.User:
+async def authenticate_user(db: AsyncSession, email: str, password: str):
+    user = await get_user_by_email(db, email)
+    if not user:
+        return None
+    if not verify_password(password, user.password):
+        return None
+    return user
+
+def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+# /user/register
+async def register(user_body: user_schema.UserCreate, db: AsyncSession):
     
-    existing_user = await get_user_by_email(db, user_body.email)
+    existing_name = await get_user_by_name(db, user_body.name)
     
-    if existing_user:
+    if existing_name:
         raise HTTPException(
             status_code=400, 
-            detail="User already exists"
+            detail="Name already exists"
+        )
+    
+    existing_email = await get_user_by_email(db, user_body.email)
+    
+    if existing_email:
+        raise HTTPException(
+            status_code=400, 
+            detail="Email already exists"
         )
         
     hashed_password = get_password_hash(user_body.password)
@@ -59,28 +87,10 @@ async def register(db: AsyncSession, user_body: user_schema.UserCreate) -> user_
     return db_user
 
 
-async def authenticate_user(db: AsyncSession, username: str, password: str):
-    user = await get_user_by_name(db, username)
-    if not user:
-        return None
-    if not verify_password(password, user.password):
-        return None
-    return user
-
-def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None) -> str:
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.now(timezone.utc) + expires_delta
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-
-async def login_user(db: AsyncSession, username: str, password: str, response: Response = None):
+# /user/login
+async def login_user(db: AsyncSession, email: str, password: str, response: Response = None):
     
-    user = await authenticate_user(db, username, password)
+    user = await authenticate_user(db, email, password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -93,7 +103,10 @@ async def login_user(db: AsyncSession, username: str, password: str, response: R
     
    
     access_token = create_access_token(
-        data={"sub": user.name},
+        data={
+            "sub": user.email,
+            "name": user.name,
+            },
         expires_delta=access_token_expires
     )
     
