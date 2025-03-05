@@ -7,6 +7,7 @@ import ProtectRoute from "./components/ProtectRoute.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import RegisterPage from "./pages/RegisterPage.tsx";
 
 const App = () => {
     const theme = useTemplateTheme();
@@ -16,7 +17,8 @@ const App = () => {
             <Routes>
                 <Route index element={<ProtectRoute><HomePage /></ProtectRoute>} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="*" element={<ProtectRoute><NotFoundPage/></ProtectRoute>} />
+                <Route path="/register" element={<RegisterPage/>} />
+                <Route path="*" element={<NotFoundPage/>} />
             </Routes>
         </ThemeProvider>
     );

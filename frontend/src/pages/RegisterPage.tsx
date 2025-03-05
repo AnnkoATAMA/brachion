@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import {CircularProgress} from "@mui/material";
-import Login from "../components/Login.tsx";
+import Register from "../components/Register.tsx";
 
-const LoginPage = () => {
+
+const RegisterPage = () => {
     return (
         <Suspense fallback={<CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />}>
-            <Login />
+            <Register />
         </Suspense>
     );
 }
 
-export default LoginPage;
+export default RegisterPage;
