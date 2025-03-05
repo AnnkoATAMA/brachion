@@ -1,4 +1,6 @@
 import uvicorn
+import yaml
+import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import user
@@ -13,6 +15,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+with open("mahjong.yaml", "r", encoding="utf-8") as file:
+    openapi_schema = yaml.safe_load(file)
+
+def custom_openapi():
+    return openapi_schema
+
+app.openapi = custom_openapi
 
 @app.get("/")
 def health():

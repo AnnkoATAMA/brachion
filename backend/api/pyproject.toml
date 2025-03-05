@@ -17,7 +17,8 @@ dependencies = [
     "pymysql>=1.1.0",
     "cryptography>=42.0.0",
     "bcrypt>=4.0.1",
-    "python-multipart>=0.0.20", 
+    "python-multipart>=0.0.20",
     "python-dotenv>=1.0.1",
     "pydantic_settings>=2.8.1",
+    "pyyaml>=6.0.2",
 ]
