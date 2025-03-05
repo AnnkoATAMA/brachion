@@ -4,8 +4,6 @@ info:
   version: "1.0"
   description: "オンライン麻雀ゲームAPI"
 tags:
-  - name: Users
-    description: User management
   - name: Rooms
     description: Room management
   - name: Players
@@ -13,63 +11,6 @@ tags:
   - name: WebSocket
     description: Real-time communication
 paths:
-  /user/register:
-    post:
-      tags:
-        - Users
-      summary: "ユーザー登録"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [username, password]
-              properties:
-                username:
-                  type: string
-                  example: "player1"
-                password:
-                  type: string
-                  example: "securepassword"
-      responses:
-        "200":
-          description: "ユーザー作成完了"
-
-  /user/login:
-    post:
-      tags:
-        - Users
-      summary: "ログイン"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [username, password]
-              properties:
-                username:
-                  type: string
-                  example: "player1"
-                password:
-                  type: string
-                  example: "securepassword"
-      responses:
-        "200":
-          description: "ログイン成功"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  access_token:
-                    type: string
-                    description: "JWTアクセストークン"
-                    example: "eyJhbGciOiJIUzI1..."
-                  token_type:
-                    type: string
-                    example: "Bearer"
   /room:
     post:
       tags:
