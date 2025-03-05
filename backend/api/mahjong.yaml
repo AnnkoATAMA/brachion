@@ -11,6 +11,53 @@ tags:
   - name: WebSocket
     description: Real-time communication
 paths:
+  "/api/user/register":
+    "post":
+      "summary": "Register",
+      "operationId": "register_api_user_register_post",
+      "requestBody":
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/UserCreate"
+        "required": true
+      "responses":
+        "200":
+          "description": "Successful Response",
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/UserCreateResponse"
+        "422":
+          "description": "Validation Error",
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/HTTPValidationError"
+  "/api/user/login":
+    "post":
+      "summary": "Login For Access Token",
+      "operationId": "login_for_access_token_api_user_login_post",
+      "requestBody":
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/EmailPasswordLogin"
+        "required": true
+      "responses":
+        "200":
+          "description": "Successful Response",
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Token"
+
+        "422":
+          "description": "Validation Error",
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/HTTPValidationError"
   /room:
     post:
       tags:
