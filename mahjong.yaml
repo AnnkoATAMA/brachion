@@ -1,0 +1,226 @@
+openapi: 3.0.0
+info:
+  title: "mahjong"
+  version: "1.0"
+  description: "オンライン麻雀ゲームAPI"
+tags:
+  - name: Users
+    description: User management
+  - name: Rooms
+    description: Room management
+  - name: Players
+    description: Player management
+  - name: WebSocket
+    description: Real-time communication
+paths:
+  /user/register:
+    post:
+      tags:
+        - Users
+      summary: "ユーザー登録"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                  example: "player1"
+                password:
+                  type: string
+                  example: "securepassword"
+      responses:
+        "200":
+          description: "ユーザー作成完了"
+
+  /user/login:
+    post:
+      tags:
+        - Users
+      summary: "ログイン"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                  example: "player1"
+                password:
+                  type: string
+                  example: "securepassword"
+      responses:
+        "200":
+          description: "ログイン成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: "JWTアクセストークン"
+                    example: "eyJhbGciOiJIUzI1..."
+                  token_type:
+                    type: string
+                    example: "Bearer"
+  /room:
+    post:
+      tags:
+        - Rooms
+      summary: Create a room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                max_players:
+                  type: integer
+                game_type:
+                  type: string
+                  enum: [sanma, yonma]
+      responses:
+        201:
+          description: Room created
+    get:
+      tags:
+        - Rooms
+      summary: Get room list
+      responses:
+        200:
+          description: List of rooms
+
+  /room/{room_id}:
+    put:
+      tags:
+        - Rooms
+      summary: Update room settings
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                game_type:
+                  type: string
+                  enum: [sanma, yonma]
+      responses:
+        200:
+          description: Room updated
+    delete:
+      tags:
+        - Rooms
+      summary: Delete a room
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Room deleted
+
+  /room/{room_id}/join:
+    post:
+      tags:
+        - Players
+      summary: Join a room
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Joined the room
+
+  /room/{room_id}/leave:
+    delete:
+      tags:
+        - Players
+      summary: Leave a room
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Left the room
+
+  /room/{room_id}/players:
+    get:
+      tags:
+        - Players
+      summary: Get list of players in a room
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: List of players
+
+  /room/{room_id}/player/{player_id}:
+    put:
+      tags:
+        - Players
+      summary: Update a player's status
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: player_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+      responses:
+        200:
+          description: Player status updated
+
+  /room/{room_id}/ws:
+    get:
+      tags:
+        - WebSocket
+      summary: WebSocket connection for real-time game updates
+      parameters:
+        - name: room_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        101:
+          description: WebSocket connected
