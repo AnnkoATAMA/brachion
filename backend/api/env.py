@@ -2,9 +2,10 @@ import os
 from dotenv import load_dotenv
 from os.path import join, dirname, abspath
 
-root_dir = dirname(dirname(dirname(abspath(__file__))))
-dotenv_path = join(root_dir, '.env')
+current_dir = dirname(abspath(__file__))  
+dotenv_path = join(current_dir, '.env')  
 load_dotenv(dotenv_path)
+
 
 
 class Env:

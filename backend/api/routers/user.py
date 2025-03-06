@@ -20,8 +20,7 @@ async def login_for_access_token(
 ):
     token_data = await user_crud.login_user(
         db=db,
-        email=form_data.email,
-        password=form_data.password,
+        form_data=form_data,
         response=response
     )
     

@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from fastapi import HTTPException, status, Response
+from fastapi import Cookie, HTTPException, status, Response, Depends
+from db import get_db
+from typing import Optional
 from datetime import datetime, timedelta, timezone
 from typing import Union
 import jwt
@@ -54,6 +56,48 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+
+async def get_current_user_from_cookie(
+    db: AsyncSession = Depends(get_db),
+    access_token: Optional[str] = Cookie(None)
+):
+    
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="認証情報が不正です",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    if not access_token:
+        raise credentials_exception
+        
+    payload = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
+    user_id: str = payload.get("sub")
+    
+    if user_id is None:
+        raise credentials_exception
+
+    
+    user_id = int(user_id)
+    
+   
+        
+
+    stmt = select(user_model.User).where(user_model.User.id == user_id)
+    result = await db.execute(stmt)
+    user = result.scalar_one_or_none()
+    
+    if user is None:
+
+        raise credentials_exception
+        
+    return {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email
+    }
+
+
 # /user/register
 async def register(user_body: user_schema.UserCreate, db: AsyncSession):
     
@@ -88,9 +132,9 @@ async def register(user_body: user_schema.UserCreate, db: AsyncSession):
 
 
 # /user/login
-async def login_user(db: AsyncSession, email: str, password: str, response: Response = None):
+async def login_user(db: AsyncSession, form_data: user_schema.EmailPasswordLogin, response: Response = None):
     
-    user = await authenticate_user(db, email, password)
+    user = await authenticate_user(db, form_data.email, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -104,8 +148,9 @@ async def login_user(db: AsyncSession, email: str, password: str, response: Resp
    
     access_token = create_access_token(
         data={
-            "sub": user.email,
+            "sub": str(user.id),
             "name": user.name,
+            "email": user.email
             },
         expires_delta=access_token_expires
     )
@@ -114,7 +159,7 @@ async def login_user(db: AsyncSession, email: str, password: str, response: Resp
     if response:
         response.set_cookie(
             key="access_token",
-            value=f"Bearer {access_token}",
+            value=access_token,
             httponly=True,
             secure=False,  # HTTPS環境ではTrueにする
             samesite="lax",

@@ -4,6 +4,7 @@ import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import user
+from routers import room
 
 app = FastAPI()
 
@@ -27,9 +28,11 @@ app.openapi = custom_openapi
 def health():
     return "working!"
 
+# router足すときはここに追記してね
 prefix = "/api"
 app.include_router(user.user_router, prefix=prefix)
-# # router足すときはここに追記してね
+app.include_router(room.room_router)
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", reload=True)
