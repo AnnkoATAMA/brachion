@@ -1,11 +1,10 @@
 import { Suspense } from "react";
-import {CircularProgress} from "@mui/material";
 import Register from "../components/Register.tsx";
-
+import LoadingPage from "./LoadingPage.tsx";
 
 const RegisterPage = () => {
     return (
-        <Suspense fallback={<CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />}>
+        <Suspense fallback={<LoadingPage/>}>
             <Register />
         </Suspense>
     );
