@@ -46,7 +46,7 @@ async def join_room(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user_from_cookie)
     ):
-    
+
     return await room_crud.join_room(room_id, db, current_user)
 
 @room_router.delete("/room/{room_id}/leave")
@@ -55,10 +55,9 @@ async def leave_room(
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user_from_cookie)
     ):
-    
+
     return await room_crud.leave_room(room_id, db, current_user)
-    
-    
-    
-    
-    
+
+
+
+

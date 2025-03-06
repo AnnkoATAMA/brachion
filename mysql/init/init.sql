@@ -14,6 +14,21 @@ CREATE TABLE users (
 
 CREATE TABLE rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    max_players INT NOT NULL,
+    game_type ENUM('sanma', 'yonma') NOT NULL
+);
+
+CREATE TABLE players (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    room_id INT NOT NULL,
+    status ENUM('waiting', 'ready', 'playing', 'disconneced') NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (room_id) REFERENCES rooms(id)
+);
+
+CREATE TABLE rooms (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     max_players INT NOT NULL CHECK (max_players IN (3, 4)),
     game_type ENUM('sanma', 'yonma') NOT NULL
 );
