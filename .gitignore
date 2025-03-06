@@ -4,4 +4,6 @@ mysql/data/mysql.sock
 mysql/data
 __pycache__
 
+backend/api/.env
+
 .env
