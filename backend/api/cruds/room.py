@@ -8,7 +8,7 @@ from models import player as player_model
 from cruds.user import get_current_user_from_cookie
 
 
-# create room
+# /room POST
 async def create_room(
     form_data: room_schema.RoomCreate, 
     db: AsyncSession, 
@@ -41,7 +41,7 @@ async def create_room(
         "game_type": form_data.game_type
     }
     
-# return rooms
+# /room GET
 async def get_rooms(db: AsyncSession):
     result = await db.execute(
         select(room_model.Room)
