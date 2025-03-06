@@ -3,20 +3,29 @@ import { Box, Button, Container, MenuItem, Select, Typography } from "@mui/mater
 import { use } from "../../utils/use";
 import axios from "axios";
 
-const createRoom = async ( gameType: string) => {
-    let maxPlayers = 0;
-    if (gameType === "sanma") {
-        maxPlayers =3
-    } else {
-        maxPlayers = 4
-    }
-    return axios.post("http://localhost:8000/api/room", { max_players: maxPlayers, game_type: gameType });
+const createRoom = async (gameType: string) => {
+    let maxPlayers = gameType === "sanma" ? 3 : 4;
+    return axios.post("http://localhost:8000/room",
+        { max_players: maxPlayers, game_type: gameType },
+        { withCredentials: true } // Cookie を送信
+    );
 };
+
 const RoomForm = () => {
     const [gameType, setGameType] = useState("yonma");
+    const [error, setError] = useState<string | null>(null);
 
     const handleCreateRoom = () => {
-        const roomPromise = createRoom(gameType);
+        const roomPromise = createRoom(gameType)
+            .then(() => {
+                console.log("部屋作成成功");
+                setError(null);
+            })
+            .catch((err) => {
+                console.error("部屋作成エラー:", err);
+                setError("部屋の作成に失敗しました");
+            });
+
         use(roomPromise);
     };
 
@@ -25,6 +34,7 @@ const RoomForm = () => {
             <Typography variant="h5" gutterBottom>
                 部屋を作成
             </Typography>
+            {error && <Typography color="error">{error}</Typography>}
             <Box>
                 <Select
                     value={gameType}
