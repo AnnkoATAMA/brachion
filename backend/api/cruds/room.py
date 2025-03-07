@@ -6,6 +6,21 @@ from models import room as room_model
 from models import player as player_model
 from cruds.user import get_current_user_from_cookie
 
+async def check_player_existence(
+    user_id, room_id, db
+    ):
+    
+    result = await db.execute(
+        select(player_model.Player)
+        .where(player_model.Player.room_id == room_id)
+        .where(player_model.Player.user_id == user_id)
+    )
+    
+    player = result.scalars().first()
+    
+    return player
+    
+
 
 async def create_room(
     form_data: room_schema.RoomCreate, 
@@ -79,13 +94,7 @@ async def update_room(
     
     user_id = current_user["id"]
     
-    result = await db.execute(
-        select(player_model.Player)
-        .where(player_model.Player.room_id == room_id)
-        .where(player_model.Player.user_id == user_id)
-    )
-    
-    player = result.scalars().first()
+    player = await check_player_existence(user_id, room_id, db)
     
     if not player:
         raise HTTPException(
@@ -113,13 +122,7 @@ async def delete_room(
     
     user_id = current_user["id"]
     
-    result = await db.execute(
-        select(player_model.Player)
-        .where(player_model.Player.room_id == room_id)
-        .where(player_model.Player.user_id == user_id)
-    )
-    
-    player = result.scalars().first()
+    player = await check_player_existence(user_id, room_id, db)
     
     if not player:
         raise HTTPException(
@@ -153,19 +156,40 @@ async def join_room(
     
     user_id = current_user["id"]
     
-    result = await db.execute(
-        select(player_model.Player)
-        .where(player_model.Player.room_id == room_id)
-        .where(player_model.Player.user_id == user_id)
-    )
-    
-    player = result.scalars().first()
+    player = await check_player_existence(user_id, room_id, db)
     
     if player:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="You are already in this room"
         )
+        
+    room_data = await db.get(room_model.Room, room_id)
+    if not room_data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Room not found"
+        )
+        
+    result = await db.execute(
+        select(player_model.Player)
+        .where(player_model.Player.room_id == room_id)
+        .where(
+            (player_model.Player.status == "waiting") | 
+            (player_model.Player.status == "ready") |
+            (player_model.Player.status == "playing")
+        )
+    )
+    
+    players = result.scalars().all()
+    player_count = len(players)
+    
+    if player_count >= room_data.max_players:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Room is full. Maximum players: {room_data.max_players}"
+        )
+    
     
     player_data = player_model.Player(
         room_id=room_id,
@@ -191,13 +215,7 @@ async def leave_room(
     
     user_id = current_user["id"]
     
-    result = await db.execute(
-        select(player_model.Player)
-        .where(player_model.Player.room_id == room_id)
-        .where(player_model.Player.user_id == user_id)
-    )
-    
-    player = result.scalars().first()
+    player = await check_player_existence(user_id, room_id, db)
     
     if not player:
         raise HTTPException(
