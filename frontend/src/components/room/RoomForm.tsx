@@ -7,7 +7,7 @@ const createRoom = async (gameType: string) => {
     let maxPlayers = gameType === "sanma" ? 3 : 4;
     return axios.post("http://localhost:8000/room",
         { max_players: maxPlayers, game_type: gameType },
-        { withCredentials: true } // Cookie を送信
+        { withCredentials: true }
     );
 };
 

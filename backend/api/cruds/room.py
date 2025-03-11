@@ -22,58 +22,60 @@ async def check_player_existence(
     
 
 
+# /room POST
 async def create_room(
-    form_data: room_schema.RoomCreate, 
-    db: AsyncSession, 
+    form_data: room_schema.RoomCreate,
+    db: AsyncSession,
     current_user: dict = Depends(get_current_user_from_cookie)
     ):
-    
+
     user_id = current_user["id"]
-    
+
     result = await db.execute(
         select(player_model.Player)
         .where(player_model.Player.user_id == user_id)
         .where(
-            (player_model.Player.status == "waiting") | 
-            (player_model.Player.status == "ready") | 
+            (player_model.Player.status == "waiting") |
+            (player_model.Player.status == "ready") |
             (player_model.Player.status == "playing")
         )
     )
-    
+
     player = result.scalars().first()
-    
+
     if player:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="You are already in a room"
         )
-    
+
     room_data = room_model.Room(
         max_players=form_data.max_players,
         game_type=form_data.game_type
     )
-    
+
     db.add(room_data)
     await db.commit()
     await db.refresh(room_data)
-    
+
     room_id = room_data.id
-    
+
     player_data = player_model.Player(
         room_id=room_id,
         user_id=user_id,
         status="waiting"
     )
-    
+
     db.add(player_data)
     await db.commit()
-    
+
     return {
         "id": room_id,
         "max_players": form_data.max_players,
         "game_type": form_data.game_type
     }
-    
+
+# /room GET
 async def get_rooms(db: AsyncSession):
     
     result = await db.execute(
