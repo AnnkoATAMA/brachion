@@ -3,13 +3,17 @@ import { Container, List, ListItem, ListItemText, Typography, CircularProgress }
 import axios from "axios";
 
 interface RoomType {
-    room_id: number;
+    id: number;
     max_players: number;
     game_type: string;
 }
 
 const fetchRooms = async (): Promise<RoomType[]> => {
-    return axios.get("http://localhost:8000/room").then((res) => res.data);
+    return axios.get("http://localhost:8000/room")
+        .then((res) => {
+            console.log("API Response:", res.data);  // 👈 デバッグ用
+            return res.data;
+        });
 };
 
 const Room = () => {
@@ -59,10 +63,10 @@ const Room = () => {
                 <Typography color="error">{error}</Typography>
             ) : (
                 <List>
-                    {rooms.map((room) => (
-                        <ListItem key={room.room_id}>
+                    {rooms.map((room, index) => (
+                        <ListItem key={room.id ?? `room-${index}`}>
                             <ListItemText
-                                primary={`部屋ID: ${room.room_id}`}
+                                primary={`部屋ID: ${room.id}`}
                                 secondary={`最大プレイヤー: ${room.max_players}, ゲームタイプ: ${room.game_type}`}
                             />
                         </ListItem>

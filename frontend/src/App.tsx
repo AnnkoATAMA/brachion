@@ -2,8 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useTemplateTheme } from "./utils/theme";
-//
-// import ProtectRoute from "./components/ProtectRoute.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
@@ -16,7 +14,7 @@ const App = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Routes>
-                <Route index element={<HomePage />} />
+                <Route index element={ <HomePage />} />
                 <Route path="/room" element={<RoomPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage/>} />

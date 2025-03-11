@@ -1,17 +1,17 @@
 import { createContext, ReactNode, useState } from "react";
 
 interface AuthContextType {
-    isAuthenticated: boolean;
-    setIsAuthenticated: (auth: boolean) => void;
+    isAuthenticated: boolean | null;
+    setIsAuthenticated: (auth: boolean | null) => void;
 }
 
 export const AuthContext = createContext<AuthContextType>({
-    isAuthenticated: false,
+    isAuthenticated: null,
     setIsAuthenticated: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>

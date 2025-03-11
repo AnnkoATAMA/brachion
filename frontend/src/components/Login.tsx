@@ -2,7 +2,6 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { use } from "../utils/use";
 import {AuthContext} from "./AuthContext.tsx";
 
 const loginUser = async (email: string, password: string) => {
@@ -15,13 +14,16 @@ const Login = () => {
     const navigate = useNavigate();
     const { setIsAuthenticated } = useContext(AuthContext);
 
-    const handleLogin = () => {
-        const loginPromise = loginUser(email, password).then(() => {
+    const handleLogin = async () => {
+        try {
+            await loginUser(email, password);
             setIsAuthenticated(true);
             navigate("/");
-        });
-        use(loginPromise);
+        } catch (error) {
+            console.error("ログイン失敗:", error);
+        }
     };
+
 
     return (
         <Container maxWidth="xs" sx={{ mt: 8 }}>
