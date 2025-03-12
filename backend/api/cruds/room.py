@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from schemas import room as room_schema
 from models import room as room_model
 from models import player as player_model
+from models import user as user_model
 from cruds.user import get_current_user_from_cookie
 
 async def check_player_existence(
@@ -229,3 +230,22 @@ async def leave_room(
     await db.commit()
     
     return {"message": "leave success"}
+
+
+async def get_room_players(room_id: int, db: AsyncSession):
+    try:
+        result = await db.execute(
+            select(player_model.Player.user_id, user_model.User.name)
+            .join(user_model.User, user_model.User.id == player_model.Player.user_id)
+            .where(player_model.Player.room_id == room_id)
+        )
+        players = result.fetchall()
+
+        if not players:
+            return []
+
+        return [{"user_id": player[0], "username": player[1]} for player in players]
+
+    except Exception as e:
+        print(f"Error in get_room_players: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
