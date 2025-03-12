@@ -1,14 +1,17 @@
-import { Navigate } from "react-router-dom";
-import { ReactNode, useContext } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 
-interface ProtectRouteProps {
-    children: ReactNode;
-}
-
-const ProtectRoute = ({ children }: ProtectRouteProps) => {
+const ProtectRoute = () => {
     const { isAuthenticated } = useContext(AuthContext);
-    return isAuthenticated ? children : <Navigate to="/login" replace />;
+    const location = useLocation();
+
+    // 未ログインの場合はログインページへ遷移し、元のページを `state` に保存
+    if (!isAuthenticated) {
+        return <Navigate to="/login" state={{ redirectPath: location.pathname }} />;
+    }
+
+    return <Outlet />;
 };
 
 export default ProtectRoute;
