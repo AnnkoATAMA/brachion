@@ -13,9 +13,10 @@ export const fetchRooms = async () => {
 //         { withCredentials: true }
 //     );
 // };
+
 export const createRoom = async (gameType: string) => {
     let maxPlayers = gameType === "sanma" ? 3 : 4;
-    return axios.post("http://localhost:8000/room", { max_players: maxPlayers, game_type: gameType }, { withCredentials: true });
+    return axios.post(`${API_URL}/room`, { max_players: maxPlayers, game_type: gameType }, { withCredentials: true });
 };
 
 export const deleteRoom = async (roomId: number) => {
@@ -29,6 +30,7 @@ export const joinRoom = async (roomId: number) => {
 export const leaveRoom = async (roomId: number) => {
     return axios.delete(`${API_URL}/room/${roomId}/leave`, { withCredentials: true });
 };
+
 export const fetchRoomPlayers = async (roomId: number) => {
     return axios.get(`http://localhost:8000/room/${roomId}/players`, { withCredentials: true })
         .then(res => res.data);
