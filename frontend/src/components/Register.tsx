@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { use, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
-import { use } from "../utils/use";
 import axios from "axios";
 
 const registerUser = async (name: string, email: string, password: string) => {

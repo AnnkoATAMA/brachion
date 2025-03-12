@@ -58,6 +58,10 @@ async def leave_room(
 
     return await room_crud.leave_room(room_id, db, current_user)
 
+@room_router.get("/room/{room_id}/players")
+async def get_room_players(
+    room_id: int,
+    db: AsyncSession = Depends(get_db)
+    ):
 
-
-
+    return await room_crud.get_room_players(room_id, db)

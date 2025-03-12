@@ -1,25 +1,19 @@
-import { useState } from "react";
+import { use, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, Container, MenuItem, Select, Typography } from "@mui/material";
-import { use } from "../../utils/use";
-import axios from "axios";
-
-const createRoom = async (gameType: string) => {
-    let maxPlayers = gameType === "sanma" ? 3 : 4;
-    return axios.post("http://localhost:8000/room",
-        { max_players: maxPlayers, game_type: gameType },
-        { withCredentials: true }
-    );
-};
+import { createRoom } from "../../utils/roomApi";
 
 const RoomForm = () => {
     const [gameType, setGameType] = useState("yonma");
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleCreateRoom = () => {
         const roomPromise = createRoom(gameType)
-            .then(() => {
+            .then((response) => {
                 console.log("部屋作成成功");
-                setError(null);
+                const roomId = response.data.id;
+                navigate(`/room/${roomId}`);
             })
             .catch((err) => {
                 console.error("部屋作成エラー:", err);
