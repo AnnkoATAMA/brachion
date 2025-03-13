@@ -54,3 +54,22 @@ services:
     depends_on:
       fastapi:
         condition: service_healthy
+  
+  wiki:
+    build:
+      context: ./wiki
+      dockerfile: Dockerfile
+    ports:
+      - "5174:5174"
+    volumes:
+      - ./wiki:/app
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:5174"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 3s
+    depends_on:
+      fastapi:
+        condition: service_healthy

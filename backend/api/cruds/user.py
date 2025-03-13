@@ -20,11 +20,14 @@ ACCESS_TOKEN_EXPIRE_MINUTES = Env.ACCESS_TOKEN_EXPIRE_MINUTES
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 def get_password_hash(password):
     return pwd_context.hash(password)
 
+
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
+
 
 async def get_user_by_email(db: AsyncSession, email: str):
     result = await db.execute(
@@ -38,6 +41,7 @@ async def get_user_by_name(db: AsyncSession, name: str):
     )
     return result.scalar_one_or_none()
 
+
 async def authenticate_user(db: AsyncSession, email: str, password: str):
     user = await get_user_by_email(db, email)
     if not user:
@@ -45,6 +49,7 @@ async def authenticate_user(db: AsyncSession, email: str, password: str):
     if not verify_password(password, user.password):
         return None
     return user
+
 
 def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None):
     to_encode = data.copy()
