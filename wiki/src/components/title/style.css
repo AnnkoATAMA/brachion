@@ -1,0 +1,11 @@
+.title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: white;
+    font-size: 2.5em;
+    margin-top: 1em;
+}
