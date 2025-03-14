@@ -32,6 +32,6 @@ export const leaveRoom = async (roomId: number) => {
 };
 
 export const fetchRoomPlayers = async (roomId: number) => {
-    return axios.get(`http://localhost:8000/room/${roomId}/players`, { withCredentials: true })
+    return axios.get(`${API_URL}/room/${roomId}/players`, { withCredentials: true })
         .then(res => res.data);
 };
