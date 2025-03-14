@@ -1,4 +1,6 @@
 import {Box, Container, Typography} from "@mui/material";
+import Logout from "../components/logout.tsx"
+import {Link} from "react-router-dom";
 
 const HomePage = () => {
     return (
@@ -14,6 +16,8 @@ const HomePage = () => {
                 <Typography>
                     hello
                 </Typography>
+                <Link to="/room">roomPage</Link>
+                <Logout />
             </Box>
         </Container>
     )

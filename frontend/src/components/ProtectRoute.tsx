@@ -1,37 +1,17 @@
-import { ReactNode, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { CircularProgress, Container } from "@mui/material";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
-interface ProtectRouteProps {
-    children: ReactNode;
-}
+const ProtectRoute = () => {
+    const { isAuthenticated } = useContext(AuthContext);
+    const location = useLocation();
 
-const ProtectRoute = ({ children }: ProtectRouteProps) => {
-    const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+    // 未ログインの場合はログインページへ遷移し、元のページを `state` に保存
+    if (!isAuthenticated) {
+        return <Navigate to="/login" state={{ redirectPath: location.pathname }} />;
+    }
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const response = await fetch("/api/user/check", { credentials: "include" });
-                setAuthenticated(response.ok);
-            } catch (error) {
-                console.error("認証チェック失敗:", error);
-                setAuthenticated(false);
-            }
-        };
-        checkAuth();
-    }, []);
-
-    if (authenticated === null)
-        return (
-            <Container sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                <CircularProgress />
-            </Container>
-        );
-
-    if (!authenticated) return <Navigate to="/login" replace />;
-
-    return <>{children}</>;
+    return <Outlet />;
 };
 
 export default ProtectRoute;
