@@ -231,7 +231,7 @@ async def leave_room(
     
     return {"message": "leave success"}
 
-
+# /room/{room_id}/players GET
 async def get_room_players(room_id: int, db: AsyncSession):
     try:
         result = await db.execute(

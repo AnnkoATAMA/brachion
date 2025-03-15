@@ -8,6 +8,7 @@ from cruds import room as room_crud
 
 room_router = APIRouter()
 
+# create room
 @room_router.post("/room", response_model=room_schema.Room)
 async def create_room(
     form_data: room_schema.RoomCreate, 
@@ -17,10 +18,12 @@ async def create_room(
     
     return await room_crud.create_room(form_data, db, current_user)
 
+# get room
 @room_router.get("/room")
 async def get_rooms(db: AsyncSession = Depends(get_db)):
     return await room_crud.get_rooms(db)
 
+# update room game_type
 @room_router.put("/room/{room_id}", response_model=room_schema.Room)
 async def update_room(
     room_id: int,
@@ -31,6 +34,7 @@ async def update_room(
     
     return await room_crud.update_room(room_id, form_data, db, current_user)
 
+# delete room
 @room_router.delete("/room/{room_id}")
 async def delete_room(
     room_id: int,
@@ -40,6 +44,7 @@ async def delete_room(
     
     return await room_crud.delete_room(room_id, db, current_user)
 
+# join_room
 @room_router.post("/room/{room_id}/join")
 async def join_room(
     room_id: int,
@@ -49,6 +54,7 @@ async def join_room(
 
     return await room_crud.join_room(room_id, db, current_user)
 
+# leave_room
 @room_router.delete("/room/{room_id}/leave")
 async def leave_room(
     room_id: int,
@@ -58,6 +64,7 @@ async def leave_room(
 
     return await room_crud.leave_room(room_id, db, current_user)
 
+# get room players
 @room_router.get("/room/{room_id}/players")
 async def get_room_players(
     room_id: int,
