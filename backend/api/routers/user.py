@@ -6,12 +6,13 @@ import cruds.user as user_crud
 
 user_router = APIRouter()
 
-
+# register user
 @user_router.post("/user/register", response_model=user_schema.UserCreateResponse)
 async def register(user_body: user_schema.UserCreate, db: AsyncSession = Depends(get_db)):
         
     return await user_crud.register(user_body, db)
 
+# login user
 @user_router.post("/user/login", response_model=user_schema.Token)
 async def login_for_access_token(
     response: Response,
