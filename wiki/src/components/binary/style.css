@@ -1,0 +1,36 @@
+.binary-container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  max-width: 800px;
+  margin: 1rem auto;
+  text-align: left;
+}
+
+.result-box {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+  min-height: 100px;
+}
+
+.search-box {
+  margin: 1rem 0;
+  gap: 8px;
+}
+
+.search-box input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-box button {
+  padding: 0.5rem 1rem;
+  background-color: #004080;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
