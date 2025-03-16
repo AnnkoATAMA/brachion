@@ -8,7 +8,7 @@ const Action = ({ playerId, socket }: { playerId: string; socket: WebSocket | nu
     const handleDiscard = () => {
         if (socket && selectedTile) {
             socket.send(JSON.stringify({ event: "discard", player: playerId, tile: selectedTile }));
-            setSelectedTile(null); // 送信後にリセット
+            setSelectedTile(null);
         }
     };
 
@@ -17,7 +17,7 @@ const Action = ({ playerId, socket }: { playerId: string; socket: WebSocket | nu
             <h3>アクションパネル</h3>
             <div>
                 <h4>手牌</h4>
-                {hand.map((tile) => (
+                {hand.map((tile:string) => (
                     <button
                         key={tile}
                         onClick={() => setSelectedTile(tile)}
