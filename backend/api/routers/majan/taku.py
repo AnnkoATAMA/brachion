@@ -1,4 +1,4 @@
-from . import hai
+import hai
 from mahjong.constants import EAST, SOUTH, WEST, NORTH
 
 class Taku:
@@ -22,4 +22,4 @@ class Taku:
 
     def kan(self):
         self.kanctn += 1
-        self.dora_hyouji.append(self.yama[-(6 + self.kanctn * 2)])
+        self.dorahyouji.append(self.yama[-(6 + self.kanctn * 2)])

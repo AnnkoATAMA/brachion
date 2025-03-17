@@ -1,4 +1,4 @@
-from . import rule
+import rule
 from mahjong.constants import EAST, SOUTH, WEST, NORTH
 from collections import OrderedDict
 
