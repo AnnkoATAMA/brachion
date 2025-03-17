@@ -1,7 +1,7 @@
 import { use } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, List, ListItem, ListItemText, Typography, Button } from "@mui/material";
-import { fetchRoomPlayers, leaveRoom } from "../../utils/roomApi";
+import { fetchRoomPlayers, leaveRoom, deleteRoom } from "../../utils/roomApi";
 
 interface PlayerType {
     user_id: number;
@@ -21,7 +21,7 @@ const MatchingRoom = () => {
     const { roomId } = useParams<{ roomId: string }>();
     const navigate = useNavigate();
 
-    const players:PlayerType[] = use(roomPlayersPromise(Number(roomId)));
+    const players: PlayerType[] = use(roomPlayersPromise(Number(roomId)));
 
     const handleLeaveRoom = async () => {
         try {
@@ -29,6 +29,16 @@ const MatchingRoom = () => {
             navigate("/room");
         } catch (err) {
             console.error("退出に失敗しました:", err);
+        }
+    };
+
+    const handleDeleteRoom = async () => {
+        try {
+            await deleteRoom(Number(roomId));
+            console.log(`部屋 ${roomId} を削除しました`);
+            navigate("/room");
+        } catch (err) {
+            console.error("部屋の削除に失敗:", err);
         }
     };
 
@@ -48,6 +58,10 @@ const MatchingRoom = () => {
 
             <Button variant="contained" color="secondary" sx={{ mt: 2 }} onClick={handleLeaveRoom}>
                 退出
+            </Button>
+
+            <Button variant="contained" color="error" sx={{ mt: 2, ml: 2 }} onClick={handleDeleteRoom}>
+                部屋を削除
             </Button>
         </Container>
     );
