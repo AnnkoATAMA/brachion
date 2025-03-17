@@ -62,14 +62,13 @@ async def get_current_user_from_cookie(
     access_token: Optional[str] = Cookie(None)
 ):
     
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="認証情報が不正です",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
     
     if not access_token:
-        raise credentials_exception
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="認証情報が不正です",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
         
     payload = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
     user_id: str = payload.get("sub")
@@ -81,15 +80,16 @@ async def get_current_user_from_cookie(
     user_id = int(user_id)
     
    
-        
-
     stmt = select(user_model.User).where(user_model.User.id == user_id)
     result = await db.execute(stmt)
     user = result.scalar_one_or_none()
     
     if user is None:
-
-        raise credentials_exception
+        raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="認証情報が不正です",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
         
     return {
         "id": user.id,
