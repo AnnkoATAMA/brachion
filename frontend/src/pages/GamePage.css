@@ -1,0 +1,86 @@
+.container {
+    height: 100vh;
+}
+
+.jyantaku {
+    background-color: #00633A;
+    border:40px solid;
+    border-image: radial-gradient(#83420c, #4e300a)49%;
+    border-radius: 100px;
+    height: 85%;
+}
+
+.my-hand {
+    background: linear-gradient(180deg, #e38010 0%,#e38010 10%,white 10%,white 90% );
+    width: 80px;
+    height: 180px;
+    border-radius: 5%;
+    font-size: 9px;
+    display: grid;
+    place-items: center;
+
+}
+
+.t-hand {
+    background: linear-gradient(white 10%,#e38010 10%,#e38010 90%);]
+    width: 24px;
+    height: 30px;
+    border-radius: 10%;
+}
+
+.k-hand {
+
+    width: 29px;
+    height: 19px;
+    background-color: #e38010;]
+}
+.s-hand {
+    width: 29px;
+    height: 19px;
+    background-color: #e38010;]
+}
+
+.toi-discard-area {
+    position: absolute;
+    top: 15%;
+    left: 41%;
+    border: 2px solid;
+    margin: auto;
+    padding: 15px;
+    width: 16%;
+    height: 13%;
+}
+
+.ks-discard-area {
+    height: 40%;
+}
+
+.my-discard-area {
+    position: absolute;
+    top: 54%;
+    left: 41%;
+    border: 2px solid;
+    padding: 15px;
+    width: 16%;
+    height: 13%;
+}
+
+.discard-button {
+    margin-left: auto;
+    margin-top: auto ;
+    /*background-color: #00633A;*/
+    color: black;
+    display: block;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    font-weight: bold;
+    border: 2px solid #08985a;
+    background: #00633A;
+    color: #fff;
+    transition: 0.5s;
+}
+.discard-button:hover {
+    color: white;
+    background: #08985a;
+}
