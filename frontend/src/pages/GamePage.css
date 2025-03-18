@@ -3,7 +3,7 @@
 }
 
 .jyantaku {
-    background-color: #00633A;
+    background: radial-gradient(#00633A, #014026);
     border:40px solid;
     border-image: radial-gradient(#83420c, #4e300a)49%;
     border-radius: 100px;
@@ -12,17 +12,17 @@
 
 .my-hand {
     background: linear-gradient(180deg, #e38010 0%,#e38010 10%,white 10%,white 90% );
-    width: 80px;
+    width: 97px;
     height: 180px;
     border-radius: 5%;
-    font-size: 9px;
+    font-size: 10px;
     display: grid;
     place-items: center;
 
 }
 
 .t-hand {
-    background: linear-gradient(white 10%,#e38010 10%,#e38010 90%);]
+    background: linear-gradient(white 10%,#e38010 10%,#e38010 90%);
     width: 24px;
     height: 30px;
     border-radius: 10%;
@@ -32,12 +32,14 @@
 
     width: 29px;
     height: 19px;
-    background-color: #e38010;]
+    background: linear-gradient(90deg, white 0%, white 15%, #e38010 15%, #e38010 100%);
+    border-radius: 10%;
 }
 .s-hand {
     width: 29px;
     height: 19px;
-    background-color: #e38010;]
+    background: linear-gradient(90deg,#e38010 85%, white 85%, white 100%);
+    border-radius: 10%;
 }
 
 .toi-discard-area {
