@@ -21,7 +21,7 @@ const MatchingRoom = () => {
     useEffect(() => {
         if (!roomId) return;
 
-        const WS_URL = `ws://localhost:8000/room/${roomId}/ws`;
+        const WS_URL = `ws://172.20.10.2:8000/room/${roomId}/ws`;
         const ws = new WebSocket(WS_URL);
         setSocket(ws);
 
