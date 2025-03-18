@@ -29,7 +29,7 @@ class Janshi:
         return hai
 
     def riipai(self):
-        self.tehai = sorted(self.tehai, key=lambda t: t.number)
+        self.tehai = sorted(self.tehai, key=lambda t: t.kinds * 9 + t.number)
 
     def get_tenbou(self, tensuu):
         self.tenbou += tensuu
