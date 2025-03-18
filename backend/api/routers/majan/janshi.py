@@ -5,7 +5,7 @@ from collections import OrderedDict
 class Janshi:
 
 
-    def __init__(self, play=False):
+    def __init__(self, play=False, first=False):
         self.name = ''
         self.wind = EAST
         self.wind_str = '東家'
@@ -15,12 +15,19 @@ class Janshi:
 
         self.riichi = False
         self.tenpai = False
+        self.first = first
 
         self.play = play
 
     def haipai(self, yama):
-        self.tehai = yama[0:13]
-        del yama[0:13]
+        if self.first:
+            self.tehai = yama[0:14]
+            del yama[0:14]
+        else:
+            self.tehai = yama[0:13]
+            del yama[0:13]
+        
+    
 
     def tsumo(self, yama):
         hai = yama[0]

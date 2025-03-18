@@ -36,7 +36,10 @@ class BinaryMahjongGame:
         if len(self.players) >= 4:
             return False
             
-        player = janshi.Janshi(play=True)
+        if len(self.players) == 0:
+            player = janshi.Janshi(play=True, first=True)
+        else:
+            player = janshi.Janshi(play=True)
         player.name = name
         
         # 現在のプレイヤーの人数によって座席位置を決定
