@@ -290,11 +290,6 @@ async def websocket_endpoint(
     result = await db.execute(
         select(player_model.Player)
         .where(player_model.Player.user_id == user_id)
-        .where(
-            (player_model.Player.status == "waiting") |
-            (player_model.Player.status == "ready") |
-            (player_model.Player.status == "playing")
-        )
     )
 
     player = result.scalars().first()

@@ -10,11 +10,9 @@ class Status(str, Enum):
 
 class Player(BaseModel):
     id: int = Field(..., title="プレイヤーID")
-    name: str = Field(..., title="プレイヤー名")    
-    status: Status = Field(..., title="ステータス")
+    name: str = Field(..., title="プレイヤー名")
     
 
 class PlayerUpdate(BaseModel):
     name: str = Field(..., title="プレイヤー名")
-    status: Status = Field(..., title="ステータス")
     

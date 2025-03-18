@@ -1,6 +1,5 @@
-
 import { ListItem, ListItemText, Button } from "@mui/material";
-import { deleteRoom, joinRoom } from "../../utils/roomApi";
+import { joinRoom } from "../../utils/roomApi";
 import { useNavigate } from "react-router-dom";
 
 interface RoomType {
@@ -9,17 +8,8 @@ interface RoomType {
     game_type: string;
 }
 
-const RoomListItem:React.FC<RoomType> = ({id, max_players,game_type}) => {
+const RoomListItem: React.FC<RoomType> = ({ id, max_players, game_type }) => {
     const navigate = useNavigate();
-
-    const handleDeleteRoom = async (roomId: number) => {
-        try {
-            await deleteRoom(roomId);
-            window.location.reload();
-        } catch (err) {
-            console.error("部屋の削除に失敗:", err);
-        }
-    };
 
     const handleJoinRoom = async (roomId: number) => {
         try {
@@ -37,9 +27,6 @@ const RoomListItem:React.FC<RoomType> = ({id, max_players,game_type}) => {
                 primary={`部屋ID: ${id}`}
                 secondary={`最大プレイヤー: ${max_players}, ゲームタイプ: ${game_type}`}
             />
-            <Button variant="contained" color="error" onClick={() => handleDeleteRoom(id)}>
-                削除
-            </Button>
             <Button variant="contained" color="success" onClick={() => handleJoinRoom(id)}>
                 参加
             </Button>
