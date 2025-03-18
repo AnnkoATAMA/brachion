@@ -16,12 +16,14 @@ const MatchingRoom = () => {
     const [hand, setHand] = useState<string[]>([]);
     const [discarded, setDiscarded] = useState<string[]>([]);
     const [winner, setWinner] = useState<string | null>(null);
+    const [gameStarted, setGameStarted] = useState(false);
 
     useEffect(() => {
         if (!roomId) return;
 
         const WS_URL = `ws://localhost:8000/room/${roomId}/ws`;
         const ws = new WebSocket(WS_URL);
+        setSocket(ws);
 
         ws.onopen = () => {
             console.log("WebSocket connected to", WS_URL);
@@ -31,21 +33,15 @@ const MatchingRoom = () => {
             const data = JSON.parse(event.data);
             console.log("WebSocket Message:", data);
 
-            // ゲームが開始されたら、手牌を取得する
             if (data.action === "game_started") {
-                console.log("ゲーム開始！手牌を取得する");
-
-                // 🔥 クライアント側から get_game_state を送信
-                if (socket?.readyState === WebSocket.OPEN) {
-                    socket.send(JSON.stringify({ action: "get_game_state" }));
-                }
+                console.log("ゲーム開始！リアルタイムで手牌を取得する");
+                setGameStarted(true);
+                sendGetGameState(ws);
             }
 
-            // 🎯 ここが重要！game_state を別処理にする
             if (data.action === "game_state") {
                 console.log("プレイヤー一覧:", data.game_state.players);
 
-                // 🔍 手牌（hand）があるプレイヤーを探す
                 const currentPlayerId = Object.keys(data.game_state.players).find(
                     (id) => Array.isArray(data.game_state.players[id]?.hand) && data.game_state.players[id].hand.length > 0
                 );
@@ -58,30 +54,26 @@ const MatchingRoom = () => {
                 console.log("現在のプレイヤーID:", currentPlayerId);
                 console.log("取得した手牌:", data.game_state.players[currentPlayerId]?.hand);
 
-                // 🛠 手牌のセット
                 setHand(data.game_state.players[currentPlayerId]?.hand ?? []);
                 setDiscarded(data.game_state.players[currentPlayerId]?.discarded ?? []);
                 setWinner(data.game_state.winner ?? null);
             }
         };
 
-
-
-
-
-
         ws.onclose = (event) => {
             console.log("WebSocket connection closed:", event.reason);
         };
 
-        setSocket(ws);
+        const interval = setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ action: "get_game_state" }));
+            }
+        }, 1000);
 
-        fetchRoomPlayers(Number(roomId)).then((data) => {
-            console.log("✅ ルームのプレイヤー一覧:", data);
-            setPlayers(data);
-        });
+        fetchRoomPlayers(Number(roomId)).then(setPlayers);
 
         return () => {
+            clearInterval(interval);
             if (ws.readyState === WebSocket.OPEN) {
                 ws.close();
             }
@@ -89,21 +81,19 @@ const MatchingRoom = () => {
         };
     }, [roomId]);
 
+    const sendGetGameState = (ws: WebSocket) => {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ action: "get_game_state" }));
+        }
+    };
+
     const handleStartGame = () => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify({ action: "start_game" }));
             console.log("ゲームスタート");
-
-            // 🔥 ゲーム開始後に get_game_state をリクエスト
-            setTimeout(() => {
-                if (socket && socket.readyState === WebSocket.OPEN) {
-                    socket.send(JSON.stringify({ action: "get_game_state" }));
-                }
-            }, 1000); // 1秒待ってから送信
+            setGameStarted(true);
         }
     };
-
-
 
     const handleLeaveRoom = async () => {
         try {
@@ -135,27 +125,30 @@ const MatchingRoom = () => {
             <Typography variant="h5" gutterBottom>
                 ルーム {roomId} - 参加者一覧
             </Typography>
-                <>
-                    <List>
-                        {players.map((player) => (
-                            <ListItem key={player.user_id}>
-                                <ListItemText primary={player.username} />
-                            </ListItem>
-                        ))}
-                    </List>
 
-                    <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleStartGame}>
-                        ゲーム開始
-                    </Button>
+            <List>
+                {players.map((player) => (
+                    <ListItem key={player.user_id}>
+                        <ListItemText primary={player.username} />
+                    </ListItem>
+                ))}
+            </List>
 
-                    <Button variant="contained" color="secondary" sx={{ mt: 2, ml: 2 }} onClick={handleLeaveRoom}>
-                        退出
-                    </Button>
+            {!gameStarted && (
+                <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleStartGame}>
+                    ゲーム開始
+                </Button>
+            )}
 
-                    <Button variant="contained" color="error" sx={{ mt: 2, ml: 2 }} onClick={handleDeleteRoom}>
-                        部屋を削除
-                    </Button>
-                </>
+            <Button variant="contained" color="secondary" sx={{ mt: 2, ml: 2 }} onClick={handleLeaveRoom}>
+                退出
+            </Button>
+
+            <Button variant="contained" color="error" sx={{ mt: 2, ml: 2 }} onClick={handleDeleteRoom}>
+                部屋を削除
+            </Button>
+
+            {gameStarted && (
                 <Card sx={{ padding: 2, maxWidth: 600, margin: "auto", mt: 4 }}>
                     <Typography variant="h5">バイナリ麻雀</Typography>
                     <Grid container spacing={1}>
@@ -179,6 +172,7 @@ const MatchingRoom = () => {
                     <Typography variant="body1" sx={{ mt: 2 }}>捨て牌: {discarded.join(", ")}</Typography>
                     {winner && <Typography variant="h6" sx={{ mt: 2 }}>勝者: {winner}</Typography>}
                 </Card>
+            )}
         </Container>
     );
 };
