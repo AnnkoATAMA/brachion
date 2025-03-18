@@ -36,7 +36,10 @@ class BinaryMahjongGame:
         if len(self.players) >= 4:
             return False
             
-        player = janshi.Janshi(play=True)
+        if len(self.players) == 0:
+            player = janshi.Janshi(play=True, first=True)
+        else:
+            player = janshi.Janshi(play=True)
         player.name = name
         
         # 現在のプレイヤーの人数によって座席位置を決定
@@ -48,20 +51,20 @@ class BinaryMahjongGame:
         
         # ゲームを開始する
     def start_game(self) -> bool:
-
+        
         if len(self.players) < 2 or self.game_started:
             return False
-
+            
         random.shuffle(self.taku.yama)
-
+        
         # 配牌
         for player_id, player in self.players.items():
             player.haipai(self.taku.yama)
             player.riipai()
-
+            
         self.current_turn_idx = 0
         self.game_started = True
-
+        
         return True
     
 
@@ -290,6 +293,11 @@ async def websocket_endpoint(
     result = await db.execute(
         select(player_model.Player)
         .where(player_model.Player.user_id == user_id)
+        .where(
+            (player_model.Player.status == "waiting") |
+            (player_model.Player.status == "ready") |
+            (player_model.Player.status == "playing")
+        )
     )
 
     player = result.scalars().first()

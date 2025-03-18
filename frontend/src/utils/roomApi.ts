@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "http://172.20.10.2:8000";
 
 export const fetchRooms = async () => {
     return axios.get(`${API_URL}/room`, { withCredentials: true })
@@ -32,6 +32,6 @@ export const leaveRoom = async (roomId: number) => {
 };
 
 export const fetchRoomPlayers = async (roomId: number) => {
-    return axios.get(`http://localhost:8000/room/${roomId}/players`, { withCredentials: true })
+    return axios.get(`${API_URL}/room/${roomId}/players`, { withCredentials: true })
         .then(res => res.data);
 };

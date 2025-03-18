@@ -9,9 +9,15 @@ from routers import game
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:5173",
+    "http://172.20.10.2:5173",
+    "http://172.20.10.2:8000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
