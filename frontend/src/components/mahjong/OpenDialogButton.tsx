@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
-import "../Page/GamePage.css"
+import "./OpenDialogButton.css"
 interface OpenDialogButtonProps {
     buttonText: string;
     discardTiles: string[];

@@ -4,20 +4,21 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 const darkTheme = (mode: PaletteMode): Theme => createTheme({
     palette: {
         mode,
-        primary: { main: "#ffffff"},
+        primary: { main: "#000"},
         secondary: {main: "#fff"},
-        background: { default: "#0A0F1F"},
+        background: { default: "#ffffff"},
         text: {primary: "#D0D0D0"}
-    }
+    },
+
 });
 
 const lightTheme = (mode: PaletteMode): Theme => createTheme({
     palette: {
         mode,
-        primary: { main: "#ffffff"},
+        primary: { main: "#000000"},
         secondary: {main: "#000000"},
-        background: { default: "#0A0F1F"},
-        text: {primary: "#D0D0D0"}
+        background: { default: "#ffffff"},
+        text: {primary: "#000000"}
     }
 });
 

@@ -36,8 +36,8 @@ const RoomForm = () => {
                     fullWidth
                     displayEmpty
                 >
-                    <MenuItem value="sanma">三麻</MenuItem>
-                    <MenuItem value="yonma">四麻</MenuItem>
+                    <MenuItem value="sanma" color="black">三麻</MenuItem>
+                    <MenuItem value="yonma" color="black">四麻</MenuItem>
                 </Select>
                 <Button
                     fullWidth

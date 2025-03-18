@@ -7,7 +7,7 @@
     border:40px solid;
     border-image: radial-gradient(#83420c, #4e300a)49%;
     border-radius: 100px;
-    height: 85%;
+    height: 100%;
 }
 
 .my-hand {
@@ -18,6 +18,7 @@
     font-size: 10px;
     display: grid;
     place-items: center;
+    color: black;
 
 }
 
@@ -26,6 +27,7 @@
     width: 24px;
     height: 30px;
     border-radius: 10%;
+    color: black;
 }
 
 .k-hand {
@@ -34,23 +36,26 @@
     height: 19px;
     background: linear-gradient(90deg, white 0%, white 15%, #e38010 15%, #e38010 100%);
     border-radius: 10%;
+    color: black;
 }
 .s-hand {
     width: 29px;
     height: 19px;
     background: linear-gradient(90deg,#e38010 85%, white 85%, white 100%);
     border-radius: 10%;
+    color: black;
 }
 
 .toi-discard-area {
     position: absolute;
     top: 15%;
     left: 41%;
-    border: 2px solid;
+    border: 2px solid black;
     margin: auto;
     padding: 15px;
     width: 16%;
     height: 13%;
+
 }
 
 .ks-discard-area {
@@ -61,7 +66,7 @@
     position: absolute;
     top: 54%;
     left: 41%;
-    border: 2px solid;
+    border: 2px solid black;
     padding: 15px;
     width: 16%;
     height: 13%;

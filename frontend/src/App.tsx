@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import RoomPage from "./pages/RoomPage.tsx";
 import ProtectRoute from "./components/ProtectRoute.tsx";
 import MatchPage from "./pages/MatchPage.tsx";
+import GamePage from "./pages/GamePage.tsx";
 
 const App = () => {
     const theme = useTemplateTheme();
@@ -23,6 +24,7 @@ const App = () => {
                     <Route index element={ <HomePage />} />
                     <Route path="/room" element={<RoomPage />} />
                     <Route path="/room/:roomId" element={<MatchPage />} />
+                    <Route path="gamepage" element={<GamePage />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage/>} />
             </Routes>

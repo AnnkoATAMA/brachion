@@ -2,6 +2,7 @@
 import { ListItem, ListItemText, Button } from "@mui/material";
 import { deleteRoom, joinRoom } from "../../utils/roomApi";
 import { useNavigate } from "react-router-dom";
+import "./Room.css"
 
 interface RoomType {
     id: number;
@@ -32,8 +33,8 @@ const RoomListItem:React.FC<RoomType> = ({id, max_players,game_type}) => {
     };
 
     return (
-        <ListItem sx={{ display: "flex", justifyContent: "space-between" }}>
-            <ListItemText
+        <ListItem sx={{ display: "flex", justifyContent: "space-between" }}　>
+            <ListItemText color="white"
                 primary={`部屋ID: ${id}`}
                 secondary={`最大プレイヤー: ${max_players}, ゲームタイプ: ${game_type}`}
             />

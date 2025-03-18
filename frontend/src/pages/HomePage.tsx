@@ -2,7 +2,8 @@ import {Link} from "react-router-dom";
 import Logout from "../components/logout.tsx";
 import { useEffect } from "react";
 import "./HomePage.css";
-import {Box, Typography} from "@mui/material";
+import {Box, Typography, Button} from "@mui/material";
+
 
 const HomePage = () => {
     useEffect(() => {
@@ -26,7 +27,9 @@ const HomePage = () => {
         <Box className="homepage-container">
             <Box className="binary-background"></Box>
             <Typography variant="h3" >Binary Mahjong</Typography>
-            <Link to="/room" className="start">Start</Link>
+            <Button component={Link} to="/room" sx={{color:"white"}}>Start</Button>
+            <Button component={Link} to="/gamepage" sx={{color:"white"}}>gamepageへ</Button>
+
             <Logout />
         </Box>
 
