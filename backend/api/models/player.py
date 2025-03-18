@@ -8,6 +8,5 @@ class Player(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     room_id = Column(Integer, ForeignKey("rooms.id"), nullable=False)
-    status = Column(Enum('waiting', 'ready', 'playing', 'disconnected'), nullable=False)
     
    

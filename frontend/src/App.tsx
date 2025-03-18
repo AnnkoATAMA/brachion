@@ -10,7 +10,7 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import RoomPage from "./pages/RoomPage.tsx";
 import ProtectRoute from "./components/ProtectRoute.tsx";
 import MatchPage from "./pages/MatchPage.tsx";
-import BinaryMahjong from "./components/game_test/BinaryMahjung.tsx";
+
 
 const App = () => {
     const theme = useTemplateTheme();
@@ -20,7 +20,6 @@ const App = () => {
             <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage/>} />
-                <Route path="/mahjong" element={<BinaryMahjong/>} />
                 <Route element={<ProtectRoute/>}>
                     <Route index element={ <HomePage />} />
                     <Route path="/room" element={<RoomPage />} />

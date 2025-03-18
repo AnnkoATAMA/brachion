@@ -1,8 +1,7 @@
 from mahjong.constants import EAST, SOUTH, WEST, NORTH
 import random
-import rule
-import janshi
-import taku
+from . import rule, janshi, taku
+
 
 
 class Game:
