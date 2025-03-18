@@ -22,7 +22,6 @@ CREATE TABLE players (
                          id INT AUTO_INCREMENT PRIMARY KEY,
                          user_id INT NOT NULL,
                          room_id INT NOT NULL,
-                         status ENUM('waiting', 'ready', 'playing', 'disconneced') NOT NULL,
                          FOREIGN KEY (user_id) REFERENCES users(id),
                          FOREIGN KEY (room_id) REFERENCES rooms(id),
                          UNIQUE KEY unique_user_room (user_id, room_id)

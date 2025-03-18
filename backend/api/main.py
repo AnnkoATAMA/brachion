@@ -5,12 +5,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import user
 from routers import room
+from routers import game
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:5173",
+    "http://172.20.10.2:5173",
+    "http://172.20.10.2:8000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,6 +39,7 @@ def health():
 prefix = "/api"
 app.include_router(user.user_router, prefix=prefix)
 app.include_router(room.room_router)
+app.include_router(game.game_router)
 
 
 if __name__ == "__main__":
