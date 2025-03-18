@@ -313,13 +313,9 @@ components:
         name:
           type: string
           title: "プレイヤー名"
-        status:
-          type: string
-          title: "ステータス"
       required:
         - player_id
         - name
-        - status
 
     PlayerUpdate:
       type: object
@@ -327,13 +323,8 @@ components:
         name:
           type: string
           title: "Player name"
-        status:
-          type: string
-          title: "Player status"
-          enum: [ "waiting", "ready", "playing", "disconnected" ]
       required:
         - name
-        - status
 
     HTTPValidationError:
       type: object

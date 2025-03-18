@@ -35,11 +35,6 @@ async def create_room(
     result = await db.execute(
         select(player_model.Player)
         .where(player_model.Player.user_id == user_id)
-        .where(
-            (player_model.Player.status == "waiting") |
-            (player_model.Player.status == "ready") |
-            (player_model.Player.status == "playing")
-        )
     )
 
     player = result.scalars().first()
@@ -64,7 +59,6 @@ async def create_room(
     player_data = player_model.Player(
         room_id=room_id,
         user_id=user_id,
-        status="waiting"
     )
 
     db.add(player_data)
@@ -177,11 +171,6 @@ async def join_room(
     result = await db.execute(
         select(player_model.Player)
         .where(player_model.Player.room_id == room_id)
-        .where(
-            (player_model.Player.status == "waiting") | 
-            (player_model.Player.status == "ready") |
-            (player_model.Player.status == "playing")
-        )
     )
     
     players = result.scalars().all()
@@ -197,7 +186,6 @@ async def join_room(
     player_data = player_model.Player(
         room_id=room_id,
         user_id=user_id,
-        status="waiting"
     )
     
     db.add(player_data)
@@ -206,7 +194,6 @@ async def join_room(
     return {
         "id": room_id,
         "user_id": user_id,
-        "status": "waiting" 
     }
     
 # /room/{room_id}/leave DELETE

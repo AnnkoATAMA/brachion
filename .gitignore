@@ -5,5 +5,5 @@ mysql/data
 __pycache__
 
 backend/api/.env
-
+node_modules
 .env
